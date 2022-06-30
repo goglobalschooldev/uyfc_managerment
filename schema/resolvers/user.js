@@ -1,5 +1,7 @@
  
 const { auth } = require("../../config/firebaseconfig")
+ 
+ 
 const UserSchema = require('../model/user');
 const Mongoose = require('mongoose');
  
@@ -103,15 +105,7 @@ module.exports = {
           ...newUser,
           _id: uuid
         }).save();
-        // console.log(user)
-        // let user = new UserSchema({
-        //   ...newUser, 
-        //   _id: uuid
-        // });
-        //user.password = await hash(user.password, 10);
-        // let result = await user.save();
-        // result = await serializeUser(result);
-        // let token = await issueAuthToken(result);
+         
         if (user) {
           await auth
             .createUser({
@@ -137,22 +131,57 @@ module.exports = {
           message: "An error occured : " + err.message,
         };
       }
-    },updateUser:async(_,{userId,newUser})=>{
+    },
+    updateUser:async(_,{userId,newUser})=>{
       try {
-        const isUpdateUser = await UserSchema.findByIdAndUpdate({userId,...newUser}).exec();
+        const userID = await UserSchema.findById(userId)
+        if(!userID){
+          return {
+            success: false,
+            message: " Can not find user ",
+         
+        }
+        }
+        const isUpdateUser = await UserSchema.findByIdAndUpdate(userId,newUser).exec();
          
         if (isUpdateUser){
         return {
+            success: true,
             message: "Update User Success!",
-            status: true
+         
         }
       }
       return {
-         status: false,
+        success: false,
         message: "Update User Faile!"
        
     }
           
+        } catch (error) {
+          return {
+            success: false,
+            message: "An error occured" + error.message,
+          }
+        }
+    },
+    deleteUser: async (_,{userId}) => {
+      console.log(userId)
+        try {
+         const isDeleted =await UserSchema.findByIdAndDelete(userId)
+           
+          if (isDeleted)
+                    await auth
+                    .deleteUser(userId)
+                        .then(() => {
+                            console.log('Successfully deleted user');
+                        })
+                        .catch((error) => {
+                            console.log('Error deleting user:', error);
+                        });
+          return {
+            success: true,
+            message: "delete user success" ,
+          }
         } catch (error) {
           return {
             success: false,

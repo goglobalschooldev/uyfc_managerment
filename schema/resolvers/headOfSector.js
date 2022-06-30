@@ -86,7 +86,7 @@ const  headOfSectorLabel = {
     },
     Mutation : {
         createSector:async(_, {newSector})=>{
-            console.log(newSector)
+           
             try {
                 const findSector = await HeadOfSectorSchema.findOne({sectorName:newSector.sectorName})
                 if(findSector){

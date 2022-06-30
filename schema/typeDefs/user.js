@@ -10,7 +10,7 @@ module.exports = gql`
     type Mutation {
         createUser(newUser:UserInput):UserResponse
         updateUser(userId:ID,newUser:UpdateUserInput):UserResponse
-        #deleteUser():UserResponse
+        deleteUser(userId:ID):UserResponse
         login(email:String,password:String):LoginResponse!
         resetPassword(userId:ID, password:String):UserResponse
         refreshToken(requestToken:String):UserResponse
