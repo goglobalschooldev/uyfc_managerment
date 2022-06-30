@@ -27,7 +27,7 @@ const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './schema/resol
 
 (
   async () => {
-    const PORT = 4300;
+    const PORT = 4550;
 
     const app = express();
     const httpServer = createServer(app);
