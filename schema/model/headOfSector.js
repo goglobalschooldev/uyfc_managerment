@@ -1,15 +1,14 @@
 const mongoose = require('mongoose');
 const Paginate = require('mongoose-paginate-v2');
-
-
 const headOfSectorSchema = new mongoose.Schema({
+    
     sectorName:String,
-    remark: String,
-    sectorMemberID :{ 
-        type : mongoose.Schema.Types.ObjectId, 
-        ref:'MemberSector'
-     },
-    note:String,
+    sectorMemberId:{                
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'PersonalInforSchema',
+    },
+     remark: String,
+     total:Number
    
 }, {timestamps:true});
 

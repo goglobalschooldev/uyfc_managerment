@@ -22,7 +22,7 @@ module.exports = {
   Query: {
     getUsers: async (_, { } ) => {
       try {
-        const users = await UserSchema.find({}).populate('role');
+        const users = await UserSchema.find({}) //.populate('role');
         return users;
       } catch (error) {
         return {

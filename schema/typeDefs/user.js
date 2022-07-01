@@ -6,11 +6,13 @@ module.exports = gql`
         getUsers:[User]
         getUserById(id:ID!):User
         getUserPagination(page:Int, limit:Int, keyword:String,  pagination:Boolean):UserPaginator
+         
     }
     type Mutation {
         createUser(newUser:UserInput):UserResponse
         updateUser(userId:ID,newUser:UpdateUserInput):UserResponse
         deleteUser(userId:ID):UserResponse
+        
         login(email:String,password:String):LoginResponse!
         resetPassword(userId:ID, password:String):UserResponse
         refreshToken(requestToken:String):UserResponse
@@ -24,7 +26,7 @@ module.exports = gql`
         password: String
         phone: String
         address: String
-        role: Role
+        #role: Role
         dob:Date
         active:Boolean
         profileImage:String

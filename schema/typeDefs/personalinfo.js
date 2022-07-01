@@ -26,6 +26,8 @@ module.exports = gql`
         addFamilyInfoToPersonalInfo(personalInfoId:ID, newPersonalInfo:familyInfoInput):PersonalInfoResponse
         updateFamilyInfoToPersonalInfo(personalInfoId:ID,familyInfoId:ID, newPersonalInfo:familyInfoInput):PersonalInfoResponse
         deleteFamilyInfoToPersonalInfo(personalInfoId:ID,familyInfoId:ID ):PersonalInfoResponse
+
+        
     }
     type GetMemberByDistric{
         _id:String
@@ -172,11 +174,6 @@ module.exports = gql`
     }
 
     type CurrentEducation{
-        # part:String,
-        # grade:String,
-        # major:String,
-        # year:String,
-        # school:School
         currentEducationKnowelege:CurrentEducationKnowelege
         universityEducation:UniversityEducation
     }

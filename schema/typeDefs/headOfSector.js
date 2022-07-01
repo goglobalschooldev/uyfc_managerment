@@ -18,14 +18,15 @@ module.exports = gql`
     total:Int
    }
     type Sector {
-        sectorName:String
-        remark:String
-        #sectorMemberID:MemberSector
+     _id:ID, 
+    sectorName:String,
+    sectorMemberId:PersonalInfo ,
+    remark: String,
     }
     input SectorInput{
         sectorName:String
+        sectorMemberId:ID
         remark: String
-        #sectorMemberID:ID
     }
     type SectorMessage{
         success: Boolean

@@ -3,10 +3,9 @@ const Paginate = require('mongoose-paginate-v2');
 
 
 const personalInforSchema = new mongoose.Schema({
-    
-   
-    fullName:String,
+
     personalId:String,
+    fullName:String,
     nickName:String,
     latin:String,
     gender:{
@@ -14,19 +13,23 @@ const personalInforSchema = new mongoose.Schema({
         enum:['Male', 'Female']
     },
     nation:String,
-    nationality:String,
-    religion:String,
-    dateOfBirth:Date,
-    tell:String,
-    identifier:String,
-    passport:String,
-    email:String,
-    driverLicense:String,
-    joiningDate:Date,
-    reasonJoining:String,
-    healthy:String,
-    isVote:Boolean,
-    isNewMember:Boolean,
+   nationality:String,
+   religion:String,
+   dateOfBirth:Date,
+   tell:String,
+   identifier:String,
+   passport:String,
+   email:String,
+   driverLicense:String,
+   joiningDate:Date,
+   reasonJoining:String,
+   healthy:String,
+   isVote:Boolean,
+   isNewMember:{
+    type:Boolean,
+    default:true,
+    required:true
+   },   
     currentAddress: {  
       village:String,
       commune:String,

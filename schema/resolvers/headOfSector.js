@@ -16,8 +16,10 @@ const  headOfSectorLabel = {
     Query:{
         getSectors:async(_, {})=>{
             try {
-                const get = await HeadOfSectorSchema.find().populate('sectorMemberID')
+                const get = await HeadOfSectorSchema.find().populate('sectorMemberId')
+                console.log("Get : " ,get)
                 return get
+                console.log("hello world")
             } catch (error) {
                 return{
                     success:false,
@@ -43,7 +45,7 @@ const  headOfSectorLabel = {
         getSectorById:async (_,{sectorID}) =>{
            
             try {
-                const findSectorById = await HeadOfSectorSchema.findById(sectorID)
+                const findSectorById = await HeadOfSectorSchema.findById(sectorID).populate('sectorMemberId')
                 console.log(findSectorById)
                 if(!findSectorById){
                     return{

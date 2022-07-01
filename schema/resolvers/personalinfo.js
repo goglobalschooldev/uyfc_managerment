@@ -1,4 +1,4 @@
-//import consolaGlobalInstance from "consola";
+  
 const PersonalInforSchema = require('../model/personalInfo');
 
 const personalInfoLabel = {
@@ -128,13 +128,12 @@ module.exports ={
         getTotalSector: async (_, {} ) => {
             try {
                 const sectors = await PersonalInforSchema.aggregate( [
-                    {
-                        $match:{totalSector:true}
-                    },
+                    // {
+                    //     $match:{totalSector:true}
+                    // },
                     { $group: {
                          _id: null,
-                          totalSector: { $sum: 1 } 
-                        
+                        totalSector: { $sum: 1 } 
                     } },
                  ] )
                  return sectors
@@ -356,7 +355,7 @@ module.exports ={
                     }
                 }
                 return{
-                    success:false,
+                    success:true,
                     message:"ការលុបត្រូវបានជោគជ័យ"
                 }
             } catch (error) {
@@ -367,6 +366,8 @@ module.exports ={
             }
         },
         addFamilyInfoToPersonalInfo:async(_, {personalInfoId, newPersonalInfo} )=>{
+            console.log(personalInfoId,
+                newPersonalInfo)
             try {
                 const personalInfo = await PersonalInforSchema.findById(personalInfoId)
                 if(!personalInfo){
@@ -387,6 +388,7 @@ module.exports ={
                         message:"O1"
                     }
                 }
+
                 return{
                     success:true,
                     message:"Success"
@@ -394,7 +396,7 @@ module.exports ={
             } catch (error) {
                 return{
                     success:false,
-                    message:"O1" + error.message
+                    message:"Error :" + error.message
                 }
             }
         },
