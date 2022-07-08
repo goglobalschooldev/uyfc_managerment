@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Paginate = require('mongoose-paginate-v2');
+const paginate = require('mongoose-paginate-v2');
 const headOfSectorSchema = new mongoose.Schema({
     
     sectorName:String,
@@ -13,7 +13,7 @@ const headOfSectorSchema = new mongoose.Schema({
 }, {timestamps:true});
 
 
-headOfSectorSchema.plugin(Paginate);
+headOfSectorSchema.plugin(paginate);
 
 const model = mongoose.model('HeadOfSectorSchema', headOfSectorSchema);
 module.exports = model;

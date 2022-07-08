@@ -17,7 +17,7 @@ module.exports ={
     Query: {
         getPersonalInfo:async(_, {},  )=>{
             try {
-                const get = await PersonalInforSchema.find({})
+                const get = await PersonalInforSchema.find()
                 console.log(get)
                 return get
             } catch (error) {
@@ -44,6 +44,7 @@ module.exports ={
                 limit: limit || 10,
                 pagination: pagination,
                 customLabels: personalInfoLabel,
+                
                 sort: {
                     createdAt: -1,
                 },
@@ -108,12 +109,8 @@ module.exports ={
                         $group:{
                             _id:null,
                             totalMember:{$sum:1},
-                            male: {
-                                $sum: '$male'
-                            },
-                            female: {
-                                $sum: '$female'
-                            },
+                            male: { $sum: '$male'  },
+                            female: {  $sum: '$female' },
                         }
                     }
                 ])
@@ -128,9 +125,7 @@ module.exports ={
         getTotalSector: async (_, {} ) => {
             try {
                 const sectors = await PersonalInforSchema.aggregate( [
-                    // {
-                    //     $match:{totalSector:true}
-                    // },
+                     
                     { $group: {
                          _id: null,
                         totalSector: { $sum: 1 } 
@@ -146,19 +141,21 @@ module.exports ={
         },
         getMemberByDistrict:async(_, {} )=>{
             try {
-                const get = await PersonalInforSchema.aggregate([
-                    {
-                        $project:{
-                            currentAddress:1
-                        }
+                let query =[
+                        {
+                            $project:{
+                                currentAddress:1
+                            }
+                        },
+                        
+                        {
+                            $group:{
+                                _id:"$currentAddress.district",
+                                totalMember:{$sum:1}
+                            }
                     },
-                    {
-                        $group:{
-                            _id:"$currentAddress.district",
-                            totalMember:{$sum:1}
-                        }
-                    }
-                ])
+                ]
+                let get = await PersonalInforSchema.aggregate(query).sort({totalMember:-1}).limit(5)
                 return get
             } catch (error) {
                 return {
@@ -191,11 +188,11 @@ module.exports ={
                 }
             }
         }
-    
 }
      ,
     Mutation: {
         createPersonalInfo:async (_,{newPersonalInfo} ) => {
+            console.log(newPersonalInfo)
             try {
                 const personalInfo =  await PersonalInforSchema.findOne({fullName:newPersonalInfo.fullName})
                 if(personalInfo){
@@ -455,6 +452,88 @@ module.exports ={
                 return{
                     success:false,
                     message:"O3" + error.message
+                }
+            }
+        },
+        addForiegnLanguage:async(_,{personalInfoId,newForiegnLanguage})=>{
+            try {
+                const personalInfo = await PersonalInforSchema.findById(personalInfoId)
+                if(!personalInfo){
+                    return{
+                        success:false,
+                        message:"ការបញ្ចូលបានបរាជ័យ"
+                    }
+                }
+                const addForiegnLanguage = await PersonalInforSchema.findByIdAndUpdate(personalInfoId,{
+                    $push:{shortCourse:newForiegnLanguage}
+                })
+                if(!addForiegnLanguage){
+                    return{
+                        success:false,
+                        message:"ការបន្ថែមភាសារត្រូវបានបរាជ័យ"
+                    }
+                }
+                return{
+                    success:true,
+                    message:"ការបន្ថែមភាសារត្រូវបានជោគជ័យ"
+                }
+            } catch (error) {
+                return{
+                    success:false,
+                    message:"Eorrer" + error.message
+                }
+            }
+        },
+        updateForiegnLanguage:async(_,{personalInfoId,foriegnLanguageId,newForiegnLanguage})=>{
+            console.log(personalInfoId,foriegnLanguageId,newForiegnLanguage)
+            try {
+                const update = await PersonalInforSchema.updateOne(
+                    {personalInfoId, foriegnLanguageId},
+                    {
+                        $set:{
+                            shortCourse:newForiegnLanguage
+                        }
+                    }
+                )
+                if(!update){
+                    return{
+                        success:false,
+                        message:"Update ForiengLaguage failse"
+                    }
+                }
+                return{
+                    success:true,
+                    message:"ការកែប្រែបានជោគជ័យ"
+                }
+            } catch (error) {
+                return{
+                    success:false,
+                    message:"Eorrer" + error.message
+                }
+            }
+        },
+        deleteForiegnLanguage:async(_,{personalInfoId,foriegnLanguageId}) => {
+            try {
+                const isDelete = await PersonalInforSchema.updateOne(
+                    {personalInfoId, foriegnLanguageId},
+                    {
+                         $pull:{shortCourse:{_id:foriegnLanguageId}}
+                    }
+                )
+                if(!isDelete){
+                    return {
+                        success:false,
+                        message:"ការលុបត្រូវបានបរាជ័យ"
+                    }
+                }
+                return{
+                    success:true,
+                    message:"ការលុបត្រូវបានជោគជ័យ"
+                }
+            } catch (error) {
+                return{
+                    success:false,
+                    message:"Eorrer" + error.message
                 }
             }
         }

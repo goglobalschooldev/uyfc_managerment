@@ -49,10 +49,7 @@ const personalInforSchema = new mongoose.Schema({
          age:Number,
          relative:String,
          tell:String,
-         village:String,
-         commune:String,
-         district:String,
-         province:String,
+         placeOfEmergency:String
         }
     ],
     historic:[
@@ -79,6 +76,7 @@ const personalInforSchema = new mongoose.Schema({
          major:String,
          schoolName:String,
          }],
+
          universityEducation: [{
              grade:String,
              major:String,
@@ -142,12 +140,9 @@ const personalInforSchema = new mongoose.Schema({
          tell:String,
         }
      ],
-    shortCause:[
+     shortCourse: [
        {
-         foriegnLanguage:{
-             type:String,
-             enum:['English', 'French', 'Thai',  'Chinese', 'Japanese', 'Korean','Other'],
-         },
+         foriegnLanguage: String,
          level:String,
      }
     ],
@@ -161,7 +156,6 @@ const personalInforSchema = new mongoose.Schema({
     image:String,
    
 }, {timestamps:true});
-
 
 personalInforSchema.plugin(Paginate);
 

@@ -1,7 +1,8 @@
-const HeadOfSectorSchema = require('../model/headOfSector');
+// const HeadOfSectorSchema = require('../model/headOfSector');
+const HeadOfSectorSchema= require ("../model/headOfSector")
 
 const  headOfSectorLabel = {
-    docs: "headOfSector",
+    docs: "sector",
     limit: "perPage",
     nextPage: "next",
     prevPage: "prev",
@@ -17,9 +18,9 @@ const  headOfSectorLabel = {
         getSectors:async(_, {})=>{
             try {
                 const get = await HeadOfSectorSchema.find().populate('sectorMemberId')
-                console.log("Get : " ,get)
+                
                 return get
-                console.log("hello world")
+                
             } catch (error) {
                 return{
                     success:false,
@@ -63,27 +64,32 @@ const  headOfSectorLabel = {
             }
 
         },
-        getSectorPaginator: async(_, {page, limit, keyword,  pagination})=>{
-            const options = {
-                page: page || 1,
-                limit: limit || 10,
-                pagination: pagination,
-                customLabels: headOfSectorLabel,
-                sort: {
-                    createdAt: -1,
-                },
-                populate: "",
-                    }
-            const query = {
-                // $or: [
-                //     { 
-                //         sectorName: { $regex: keyword, $options: "i" } 
-                //     },
-                //  ],
+        getSectorPaginator: async(__, args)=>{
+            try {
+                const options = {
+                    page: args.page || 1,
+                    limit: args.limit || 10,
+                    keyword: args.keyword,
+                    customLabels: headOfSectorLabel,
+                    sort: {
+                      createdAt: -1,
+                    },
+                    populate:"sectorMemberId"
+                  };
+                  
+                  const query = {
+                    $or: [{ sectorName: { $regex: args.keyword, $options: "i" } }],
+                  };
+                  const sector = await HeadOfSectorSchema.paginate(query, options);
+                  console.log(sector)
+                  return sector;
+            } catch (error) {
+                return {
+                    success:false,
+                    message:"An" + error.message
+                }
             }
-            const sectors = await HeadOfSectorSchema.paginate(query, options);
-            return sectors;
-        },
+        }
         
     },
     Mutation : {

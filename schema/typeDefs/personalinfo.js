@@ -4,7 +4,7 @@ module.exports = gql`
     scalar Date
     type Query {
         getPersonalInfo: [PersonalInfo]
-        getPersonalInfoByID(personalInfoId:ID) : PersonalInfo
+        getPersonalInfoByID(personalInfoId:ID):PersonalInfo
         getPersonalInfoPagination(page:Int, limit:Int, keyword:String,  pagination:Boolean): PersonalInfoPagination
         
         getNewMember:[totalNewMenber]
@@ -19,7 +19,7 @@ module.exports = gql`
         updatePersonalInfo(personalInfoId:ID,newPersonalInfo:PersonalInfoInput):PersonalInfoResponse
         deletePersonalInfo(personalInfoId:ID):PersonalInfoResponse
 
-        addBackgroundToPersonalInfo(personalInfoId:ID, newPersonalInfo:backgroundInput):PersonalInfoResponse
+        addBackgroundToPersonalInfo(ShortCourseInput:ID, newPersonalInfo:backgroundInput):PersonalInfoResponse
         updateBackgroundToPersonalInfo(personalInfoId:ID, backgroundId:ID, newPersonalInfo:backgroundInput):PersonalInfoResponse
         deleteBackgroundFromPersonalInfo(personalInfoId:ID, backgroundId:ID):PersonalInfoResponse
 
@@ -27,12 +27,13 @@ module.exports = gql`
         updateFamilyInfoToPersonalInfo(personalInfoId:ID,familyInfoId:ID, newPersonalInfo:familyInfoInput):PersonalInfoResponse
         deleteFamilyInfoToPersonalInfo(personalInfoId:ID,familyInfoId:ID ):PersonalInfoResponse
 
-        
+        addForiegnLanguage (personalInfoId:ID, newForiegnLanguage:ShortCourseInput): PersonalInfoResponse
+        updateForiegnLanguage(personalInfoId:ID,foriegnLanguageId:ID, newForiegnLanguage:ShortCourseInput):PersonalInfoResponse
+        deleteForiegnLanguage(personalInfoId:ID,foriegnLanguageId:ID):PersonalInfoResponse
     }
     type GetMemberByDistric{
         _id:String
         totalMember:Int
-        
     }
     type getTotalMemberAndByGender{
         totalMember:Int
@@ -43,7 +44,6 @@ module.exports = gql`
         _id:Int
         totalMember:Int
     }
-
     type PersonalInfo{
         _id:ID
         fullName: String
@@ -71,7 +71,7 @@ module.exports = gql`
         historic:[Historic]
         currentEducation:[CurrentEducation]
         background:[Background]
-        familyInfo:[FamilyInfo]
+        farmilyInfo:[FamilyInfo]
         materialStatus:[MaterialStatus]
         shortCourse:[ShortCourse]
         skill:String,
@@ -128,9 +128,9 @@ module.exports = gql`
         historic:[historicInput]
         currentEducation:[currentEducationInput]
         background:[backgroundInput]
-        familyInfo:[familyInfoInput]
+        farmilyInfo:[familyInfoInput]
         materialStatus:[materialStatusInput]
-        shortCourse:[shortCourseInput]
+        shortCourse:[ShortCourseInput]
         skill:String,
         hobby:String,
         reference:Referenceinput ,
@@ -160,6 +160,10 @@ module.exports = gql`
         district: String
         province: String
     }
+    type CurrentEducation{
+        currentEducationKnowelege:[CurrentEducationKnowelege]
+        universityEducation:[UniversityEducation]
+    }
     input CurrentAddressInput{
         village:String,
         commune:String,
@@ -172,34 +176,28 @@ module.exports = gql`
         district:String,
         province:String,
     }
-
-    type CurrentEducation{
-        currentEducationKnowelege:CurrentEducationKnowelege
-        universityEducation:UniversityEducation
-    }
     input currentEducationInput{
-        currentEducationKnowelege:CurrentEducationKnowelegeInput
-        universityEducation:UniversityEducationInput
+        currentEducationKnowelege:[CurrentEducationKnowelegeInput]
+        universityEducation:[UniversityEducationInput]
     }
     type CurrentEducationKnowelege {
-        
         grade:String,
         part:String,
         major:String,
         schoolName:String
     }
     input CurrentEducationKnowelegeInput {
-        
         grade:String,
         part:String,
         major:String,
         schoolName:String
     }
+
     type UniversityEducation{
         grade:String,
         major:String,
         year:String,
-        schoolName:String
+        schoolName:String,
     }
     input UniversityEducationInput{
         grade:String,
@@ -230,7 +228,6 @@ module.exports = gql`
         mother:motherInput
         siblings:[siblingInput]
     }
-
     type Father{
         fatherName:String,
         age:Int,
@@ -329,9 +326,10 @@ module.exports = gql`
         level:String,
         
     }
-    input shortCourseInput{
+    input ShortCourseInput{
         foriegnLanguage:String
         level:String,
         
     }
+
 `

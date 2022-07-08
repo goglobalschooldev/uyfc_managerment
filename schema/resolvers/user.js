@@ -1,9 +1,7 @@
- 
 const { auth } = require("../../config/firebaseconfig")
- 
- 
 const UserSchema = require('../model/user');
 const Mongoose = require('mongoose');
+const { authCheck } = require("../../helpers/auth");
  
 
 const userLabel = {
@@ -71,11 +69,21 @@ module.exports = {
 
       const users = await UserSchema.paginate(query, options);
       return users;
+    },
+    getUserLogin: async (_,{},{req}) => {
+     // console.log ("req",req)
+
+      const currentUser = await authCheck(req)
+    //console.log("currentUser",currentUser)
+    const user = await UserSchema.findById(currentUser.uid)
+    return user
+     
+       
     }
   },
   Mutation: {
     logoutLoginUser: async (__, args, { req }) => {
-      const currentUser = await authCheck(req);
+      const currentUser =   authCheck(req);
       if (!currentUser) {
         return {
           success: false,
@@ -97,10 +105,8 @@ module.exports = {
       }
     },
     createUser: async (_, { newUser }) => {
-      // console.log(newUser)
       try {
         const uuid = Mongoose.Types.ObjectId()
-        // console.log(uuid)
         const user = await UserSchema({
           ...newUser,
           _id: uuid
@@ -169,7 +175,7 @@ module.exports = {
         try {
          const isDeleted =await UserSchema.findByIdAndDelete(userId)
            
-          if (isDeleted)
+          if (isDeleted)        
                     await auth
                     .deleteUser(userId)
                         .then(() => {
@@ -234,14 +240,17 @@ module.exports = {
     login: async (_, { email, password }, { User, RefreshToken }) => {
       try {
         await UserAuthenticationRules.validate({ email, password }, { abortEarly: false });
+        
         let user = await UserSchema.findOne({ email });
         if (!user) {
           throw new Error("អ្នកមិនទាន់បានកត់ឈ្មោះចូលទេ!");
         }
+
         let isMatch = await compare(password, user.password);
         if (!isMatch) {
           throw new ApolloError("ពាក្យសម្ងាត់មិនត្រឹមត្រូវទេ!");
         }
+
         user = serializeUser(user);
         let token = await issueAuthToken(user);
         let refreshToken = await issueRefreshToken(user);

@@ -5,7 +5,9 @@ type Query {
     getRole: Role
 }
 type Mutation {
-    createRole(newRole: RoleInput ):RoleRespone
+    createRole(input: RoleInput ):RoleRespone
+    updateRole(roleId:ID,input: RoleInput):RoleRespone
+    deleteRole(roleId:ID):RoleRespone
 }
 type Role {
     roleName: String,

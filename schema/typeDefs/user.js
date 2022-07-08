@@ -4,6 +4,7 @@ module.exports = gql`
     scalar Date
     type Query {
         getUsers:[User]
+        getUserLogin: User
         getUserById(id:ID!):User
         getUserPagination(page:Int, limit:Int, keyword:String,  pagination:Boolean):UserPaginator
          
@@ -14,7 +15,7 @@ module.exports = gql`
         deleteUser(userId:ID):UserResponse
         
         login(email:String,password:String):LoginResponse!
-        resetPassword(userId:ID, password:String):UserResponse
+        resetPassword(userId:ID, password:String):UserResponse  
         refreshToken(requestToken:String):UserResponse
         logoutLoginUser(token: String!): UserResponse!
     }
@@ -26,7 +27,7 @@ module.exports = gql`
         password: String
         phone: String
         address: String
-        #role: Role
+        role: Role
         dob:Date
         active:Boolean
         profileImage:String
