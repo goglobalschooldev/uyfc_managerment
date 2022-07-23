@@ -27,7 +27,7 @@ const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './schema/resol
 
 (
   async () => {
-    const PORT = 4550;
+    //const PORT = 4550;
 
     const app = express();
     const httpServer = createServer(app);
@@ -47,12 +47,12 @@ const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './schema/resol
       { server: httpServer, path: server.graphqlPath }
     );
 
-    httpServer.listen(PORT, () => {
+    httpServer.listen(process.env.PORT, () => {
       console.log(
-        `🚀 Query endpoint ready at http://localhost:${PORT}${server.graphqlPath}`
+        `🚀 Query endpoint ready at http://localhost:${process.env.PORT}${server.graphqlPath}`
       );
       console.log(
-        `🚀 Subscription endpoint ready at ws://localhost:${PORT}${server.graphqlPath}`
+        `🚀 Subscription endpoint ready at ws://localhost:${process.env.PORT}${server.graphqlPath}`
       );
     });
   })();
